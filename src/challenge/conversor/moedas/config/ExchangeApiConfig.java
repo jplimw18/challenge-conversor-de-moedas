@@ -8,4 +8,12 @@ public final class ExchangeApiConfig {
         return apiUrl;
     }
 
+    public String getUrl(String baseCode, String targetCode) {
+        return  String.format("%s/%s/%s", apiUrl, baseCode.toUpperCase(), targetCode.toUpperCase());
+    }
+
+    public String getUrl(String baseCode, String targetCode, double amount) {
+        return  String.format("%s/%s/%s/%f", apiUrl, baseCode, targetCode, amount);
+    }
+
 }
