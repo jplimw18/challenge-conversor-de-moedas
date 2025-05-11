@@ -3,139 +3,81 @@ package challenge.conversor.moedas.external.client;
 import challenge.conversor.moedas.config.ExchangeApiConfig;
 import challenge.conversor.moedas.dto.ExchangeConversionRequest;
 import challenge.conversor.moedas.dto.ExchangeConversionResponse;
+import challenge.conversor.moedas.model.exchange.ExchangeErrorModel;
+import challenge.conversor.moedas.model.exceptions.BadFormatRequestException;
+import challenge.conversor.moedas.model.exchange.ExchangeConversionModel;
+import challenge.conversor.moedas.model.exchange.ExchangeModel;
 import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javax.net.ssl.SSLSession;
 import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.util.Optional;
 
 public class ExchangeApiClient {
 
-    private final ExchangeApiConfig _apiConfig;
     private final HttpClient _client;
 
     private final Gson gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
 
-    public ExchangeApiClient(ExchangeApiConfig apiConfig) {
+    public ExchangeApiClient() {
         this._client = HttpClient.newHttpClient();
-        this._apiConfig = apiConfig;
     }
 
-    public HttpResponse<ExchangeConversionResponse> convert(ExchangeConversionRequest request) {
+    public ExchangeConversionResponse<ExchangeModel> convert(ExchangeConversionRequest request) {
+        ExchangeConversionResponse<ExchangeModel> response = null;
+
+        try {
             if (
                 request.getBaseCode().isEmpty() || request.getBaseCode().isBlank()
                 || request.getTargetCode().isEmpty() || request.getTargetCode().isBlank()
             ) {
-                return new HttpResponse<ExchangeConversionResponse>() {
-                    @Override
-                    public int statusCode() {
-                        return 400;
-                    }
-
-                    @Override
-                    public HttpRequest request() {
-                        return null;
-                    }
-
-                    @Override
-                    public Optional<HttpResponse<ExchangeConversionResponse>> previousResponse() {
-                        return Optional.empty();
-                    }
-
-                    @Override
-                    public HttpHeaders headers() {
-                        return null;
-                    }
-
-                    @Override
-                    public ExchangeConversionResponse body() {
-                        return null;
-                    }
-
-                    @Override
-                    public Optional<SSLSession> sslSession() {
-                        return Optional.empty();
-                    }
-
-                    @Override
-                    public URI uri() {
-                        return null;
-                    }
-
-                    @Override
-                    public HttpClient.Version version() {
-                        return null;
-                    }
-                };
+                throw new BadFormatRequestException("Parametros inválidos");
             }
 
             HttpRequest apiRequest = request.getAmount() == 0.0 ?
-                    getRequest(request.getBaseCode(), request.getTargetCode()) :
-                    getRequest(request.getBaseCode(), request.getTargetCode(), request.getAmount());
+                    getRequestPair(request.getBaseCode(), request.getTargetCode()) :
+                    getRequestPair(request.getBaseCode(), request.getTargetCode(), request.getAmount());
 
-            HttpResponse<ExchangeConversionResponse> response;
-            try {
-               response = gson.fromJson(_client.send(apiRequest, HttpResponse.BodyHandlers.ofString()).body(), (Type) ExchangeConversionResponse.class);
-            } catch (Exception ex) {
-                return new HttpResponse<ExchangeConversionResponse>() {
-                    @Override
-                    public int statusCode() {
-                        return 500;
-                    }
 
-                    @Override
-                    public HttpRequest request() {
-                        return null;
-                    }
+            var apiResponse = _client.send(apiRequest, HttpResponse.BodyHandlers.ofString());
 
-                    @Override
-                    public Optional<HttpResponse<ExchangeConversionResponse>> previousResponse() {
-                        return Optional.empty();
-                    }
+            if (apiResponse.statusCode() == 200) {
+                ExchangeModel model = gson.fromJson(apiResponse.body(), ExchangeConversionModel.class);
 
-                    @Override
-                    public HttpHeaders headers() {
-                        return null;
-                    }
-
-                    @Override
-                    public ExchangeConversionResponse body() {
-                        return null;
-                    }
-
-                    @Override
-                    public Optional<SSLSession> sslSession() {
-                        return Optional.empty();
-                    }
-
-                    @Override
-                    public URI uri() {
-                        return null;
-                    }
-
-                    @Override
-                    public HttpClient.Version version() {
-                        return null;
-                    }
-                };
+                System.out.println(model.toString());
+                response = new ExchangeConversionResponse<>(gson.fromJson(apiResponse.body(),  ExchangeConversionModel.class));
+            }
+            else if (apiResponse.statusCode() == 400) {
+                throw new BadFormatRequestException((ExchangeErrorModel) gson.fromJson(apiResponse.body(), ExchangeErrorModel.class));
+            }
+            else {
+                throw new Exception("Falha ao obter retorno da API");
             }
 
-            return response;
+        } catch (BadFormatRequestException ex) {
+
+            response = new ExchangeConversionResponse<>(ex.getError());
+
+        } catch (Exception ex) {
+
+            ExchangeErrorModel error = new ExchangeErrorModel(ex.getMessage());
+            response = new ExchangeConversionResponse<>(error);
+
+        }
+
+        return response;
     }
 
-    private HttpRequest getRequest(String baseCode, String targetCode) {
-        return  HttpRequest.newBuilder().uri(URI.create(_apiConfig.getUrl(baseCode, targetCode))).build();
+    private HttpRequest getRequestPair(String baseCode, String targetCode) {
+        return  HttpRequest.newBuilder().uri(URI.create(ExchangeApiConfig.getUrlPair(baseCode, targetCode))).build();
     }
 
-    private HttpRequest getRequest(String baseCode, String targetCode, double amount) {
-        return  HttpRequest.newBuilder().uri(URI.create(_apiConfig.getUrl(baseCode, targetCode, amount))).build();
+    private HttpRequest getRequestPair(String baseCode, String targetCode, double amount) {
+        return  HttpRequest.newBuilder().uri(URI.create(ExchangeApiConfig.getUrlPair(baseCode, targetCode, amount))).build();
     }
 
 }

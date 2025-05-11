@@ -1,34 +1,22 @@
 package challenge.conversor.moedas.model.exchange;
 
-import challenge.conversor.moedas.dto.ExchangeConversionResponse;
+public class ExchangeConversionModel extends ExchangeModel {
 
-public class ExchangeConversionModel {
-
+    private String documentation;
+    private String termsOfUse;
+    private Long timeLastUpdateUnix;
+    private String timeLastUpdateUtc;
+    private Long timeNextUpdateUnix;
+    private String timeNextUpdateUtc;
     private String baseCode;
     private String targetCode;
-    private double conversionRate;
-    private double conversionResult;
+    private Double conversionRate;
+    private Double conversionResult;
 
-    public ExchangeConversionModel(ExchangeConversionResponse exchange) {
-        this.baseCode = exchange.getBaseCode();
-        this.targetCode = exchange.getTargetCode();
-        this.conversionRate = exchange.getConversionRate();
-        this.conversionResult = exchange.getConversionResult();
-    }
-
-    public String getBaseCode() {
-        return baseCode;
-    }
-
-    public String getTargetCode() {
-        return targetCode;
-    }
-
-    public double getConversionRate() {
-        return conversionRate;
-    }
-
-    public double getConversionResult() {
-        return conversionResult;
+    @Override
+    public String toString() {
+        return String.format("""
+                Valor %.2f [%s] corresponde ao valor final de ---> %.2f [%s] 
+                """, conversionResult / conversionRate, baseCode, conversionResult, targetCode);
     }
 }
