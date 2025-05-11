@@ -1,6 +1,14 @@
 package challenge.conversor.moedas.model.exchange;
 
-public abstract class ExchangeModel  {
+public class ExchangeModel  {
 
     private String result;
+
+    public String getResult() {
+        return result;
+    }
+
+    public void setResult(String result) {
+        this.result = result;
+    }
 }

@@ -21,7 +21,10 @@ public class ExchangeApiClient {
 
     private final HttpClient _client;
 
-    private final Gson gson = new GsonBuilder().setPrettyPrinting().setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE).create();
+    private final Gson gson = new GsonBuilder()
+            .setPrettyPrinting()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .create();
 
     public ExchangeApiClient() {
         this._client = HttpClient.newHttpClient();
@@ -46,9 +49,6 @@ public class ExchangeApiClient {
             var apiResponse = _client.send(apiRequest, HttpResponse.BodyHandlers.ofString());
 
             if (apiResponse.statusCode() == 200) {
-                ExchangeModel model = gson.fromJson(apiResponse.body(), ExchangeConversionModel.class);
-
-                System.out.println(model.toString());
                 response = new ExchangeConversionResponse<>(gson.fromJson(apiResponse.body(),  ExchangeConversionModel.class));
             }
             else if (apiResponse.statusCode() == 400) {

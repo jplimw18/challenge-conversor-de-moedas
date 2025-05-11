@@ -2,6 +2,7 @@ package challenge.conversor.moedas;
 
 import challenge.conversor.moedas.controller.ExchangeController;
 
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -37,28 +38,30 @@ public class Main {
             System.out.print(">>> ");
             action = scanner.nextByte();
 
-            System.out.print("""
+            if (action < 7 && action > 0 ) {
+                System.out.print("""
                     
                     
                     valor a converter >>> 
                     """);
-            double amount = scanner.nextDouble();
+                double amount = scanner.nextDouble();
 
-            if (action == 1) {
-                System.out.println(exchange.convert("BRL", "USD", amount).toString());
-            } else if (action == 2) {
-                System.out.println(exchange.convert("USD", "BRL", amount).toString());
-            } else if (action == 3) {
-                System.out.println(exchange.convert("COP", "BRL", amount).toString());
-            } else if (action == 4) {
-                System.out.println(exchange.convert("BRL", "COP", amount).toString());
-            } else if (action == 5) {
-                System.out.println(exchange.convert("USD", "EGP", amount).toString());
-            } else if (action == 6) {
-                System.out.println(exchange.convert("EGP", "USD", amount).toString());
+                if (action == 1) {
+                    System.out.println(exchange.convert("BRL", "USD", amount).toString());
+                } else if (action == 2) {
+                    System.out.println(exchange.convert("USD", "BRL", amount).toString());
+                } else if (action == 3) {
+                    System.out.println(exchange.convert("COP", "BRL", amount).toString());
+                } else if (action == 4) {
+                    System.out.println(exchange.convert("BRL", "COP", amount).toString());
+                } else if (action == 5) {
+                    System.out.println(exchange.convert("USD", "EGP", amount).toString());
+                } else if (action == 6) {
+                    System.out.println(exchange.convert("EGP", "USD", amount).toString());
+                }
             }
 
-        } while (action != 7);
+        } while (action != (byte) 7);
     }
 
 }
