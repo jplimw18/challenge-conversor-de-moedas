@@ -24,13 +24,16 @@ a fim de resolver problemas com os recursos que temos a disposição.
 
 <h2>Sobre a aplicação</h2>
 <p>O conversor de moedas suporta <strong>6 tipos de conversão</strong>:</p>
-
+<p><em>Você verá uma tela parecida em seu console</em></p>
 <ol>
   <li>Real Brasileiro (BRL) ---> Dólar Americano (USD)</li>
   <li>Dólar Americano (USD) ---> Real Brasileiro (BRL)</li>
-  <li>Peso Colombiano (COP) ---> Dólar Americano (USD)</li>
-  <li>Dólar Americano (USD) ---> Peso Colombiano (COP)</li>
-  <li>Libra</li>
+  <li>Peso Colombiano (COP) ---> Real Brasileiro (BRL)</li>
+  <li>Real Brasileiro (BRL) ---> Peso Colombiano (COP)</li>
+  <li>Dólar Americano (USD) ---> Libra Egípcia (EGP)</li>
+  <li>Libra Egípcia (EGP) ---> Dólar Americano (USD)</li>
 </ol>
+
+
 
 
