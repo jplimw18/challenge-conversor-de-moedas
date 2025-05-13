@@ -34,6 +34,25 @@ a fim de resolver problemas com os recursos que temos a disposição.
   <li>Libra Egípcia (EGP) ---> Dólar Americano (USD)</li>
 </ol>
 
+<p>Para converter, basta selecionar uma opção <strong>digitando de 1 a 6</strong> e, após selecionada, informe o valor que seá convertido</p>
+<br>
+<p><strong><em>Ex:</em></strong></p>
+<article>
+  <p><em>>>> 1</em></p>
+  <br>
+  <p><em>Valor a ser convertido:</em></p>
+  <p><em>100</em></p>
+</article>
+
+<h3>Retornos esperados</h3>
+<p>Após selecionar e inserir o valor a ser convertido, podemos esperar dois tipos de retorno:</p>
+<ol>
+  <li>
+    
+  </li>
+</ol>
+
+
 
 
 
