@@ -46,12 +46,22 @@ a fim de resolver problemas com os recursos que temos a disposição.
 
 <h3>Retornos esperados</h3>
 <p>Após selecionar e inserir o valor a ser convertido, podemos esperar dois tipos de retorno:</p>
-<ol>
-  <li>
-    
-  </li>
-</ol>
 
+<h4>Resultado da conversão:</h4>
+<p><strong><em>Valor 100.00 [BRL] corresponde ao valor final de ---> 17.62 [USD]</em></strong></p>
+<br>
+<h4>Erro:</h4>
+<p>*******************************************************************</p>
+<p>"<em>Mensagem de erro correspondente ao erro lançado na aplicação</em>"</p>
+<p>*******************************************************************</p>
+
+
+<h2>📈 Futuras implementações:</h2>
+<ul>
+  <li>Mostar cotação da moeda em tempo real</li>
+  <li>Histórico de conversões</li>
+  <li>...</li>
+</ul>
 
 
 
